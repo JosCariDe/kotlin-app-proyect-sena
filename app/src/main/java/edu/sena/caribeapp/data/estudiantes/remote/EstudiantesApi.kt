@@ -20,7 +20,7 @@ interface EstudiantesApi {
      * Obtiene la lista de todos los estudiantes.
      * @return Una lista de EstudianteDto.
      */
-    @GET("api/estudiantes")
+    @GET("estudiantes")
     suspend fun getAllEstudiantes(): Response<List<EstudianteDto>>
 
     /**
@@ -28,7 +28,7 @@ interface EstudiantesApi {
      * @param id El ID del estudiante.
      * @return Un EstudianteDto.
      */
-    @GET("api/estudiantes/{id}")
+    @GET("estudiantes/{id}")
     suspend fun getEstudianteById(@Path("id") id: String): Response<EstudianteDto>
 
     /**
@@ -37,7 +37,7 @@ interface EstudiantesApi {
      * @return El EstudianteDto creado con su ID.
      */
     @Headers("Content-Type: application/json")
-    @POST("api/estudiantes")
+    @POST("estudiantes")
     suspend fun createEstudiante(@Body estudianteDto: EstudianteDto): Response<EstudianteDto>
 
     /**
@@ -47,7 +47,7 @@ interface EstudiantesApi {
      * @return El EstudianteDto actualizado.
      */
     @Headers("Content-Type: application/json")
-    @PUT("api/estudiantes/{id}")
+    @PUT("estudiantes/{id}")
     suspend fun updateEstudiante(
         @Path("id") id: String,
         @Body estudianteDto: EstudianteDto
@@ -58,6 +58,6 @@ interface EstudiantesApi {
      * @param id El ID del estudiante a eliminar.
      * @return Una respuesta genérica (ej. un mensaje de éxito).
      */
-    @DELETE("api/estudiantes/{id}")
+    @DELETE("estudiantes/{id}")
     suspend fun deleteEstudiante(@Path("id") id: String): Response<Any> // O un DTO de mensaje de éxito
 }

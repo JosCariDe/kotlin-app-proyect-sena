@@ -21,7 +21,7 @@ interface AuthApi {
      * @return Un objeto Response que contiene la respuesta del registro.
      */
     @Headers("Content-Type: application/json") // Indica que el cuerpo de la petición es JSON
-    @POST("api/auth/register") // Define el metodo HTTP (POST) y la ruta del endpoint
+    @POST("auth/register") // Define el metodo HTTP (POST) y la ruta del endpoint
     suspend fun registerUser(@Body registerRequest: RegisterRequest): Response<RegisterResponse>
 
     /**
@@ -30,6 +30,6 @@ interface AuthApi {
      * @return Un objeto Response que contiene la respuesta del login.
      */
     @Headers("Content-Type: application/json")
-    @POST("api/auth/login")
+    @POST("auth/login")
     suspend fun loginUser(@Body loginRequest: LoginRequest): Response<LoginResponse>
 }
