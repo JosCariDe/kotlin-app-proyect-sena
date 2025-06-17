@@ -13,6 +13,8 @@ data class EstudianteDto(
     val nombreCompleto: String,
     @SerializedName("correo")
     val correo: String,
+    @SerializedName("contrasena_hash")
+    val contrasenaHash: String,
     @SerializedName("fecha_registro")
     val fechaRegistro: String, // Considerar usar un tipo de fecha/hora más robusto
     @SerializedName("departamento")

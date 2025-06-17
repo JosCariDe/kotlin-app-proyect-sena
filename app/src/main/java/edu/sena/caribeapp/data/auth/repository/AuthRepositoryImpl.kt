@@ -26,16 +26,7 @@ class AuthRepositoryImpl @Inject constructor(
     private val authMapper: AuthMapper // Inyecta el mapeador
 ) : AuthRepository { // Implementa la interfaz de dominio
 
-    /**
-     * Implementación del método de registro de usuario.
-     * @param fullName Nombre completo del usuario.
-     * @param email Correo electrónico del usuario.
-     * @param password Contraseña del usuario.
-     * @param department Departamento del usuario.
-     * @param municipality Municipio del usuario.
-     * @param grade Grado del usuario.
-     * @return Un Flow de Resource que indica el estado de la operación.
-     */
+
     override suspend fun registerUser(
         fullName: String,
         email: String,
