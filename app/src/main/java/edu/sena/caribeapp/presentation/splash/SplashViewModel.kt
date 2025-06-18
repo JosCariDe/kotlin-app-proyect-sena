@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,7 +25,8 @@ class SplashViewModel @Inject constructor(
     // Estado que indica si la inicialización del Splash ha terminado.
     // La UI observará este estado para saber cuándo navegar.
     private val _isReady = MutableStateFlow(false)
-    val isReady: StateFlow<Boolean> = _isReady
+    val isReady = _isReady.asStateFlow()
+    // val isReady: StateFlow<Boolean> = _isReady
 
     init {
         // Inicia la lógica del Splash cuando el ViewModel se crea.

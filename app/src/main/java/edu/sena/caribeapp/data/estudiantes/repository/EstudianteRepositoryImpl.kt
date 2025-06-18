@@ -7,6 +7,8 @@ import edu.sena.caribeapp.data.estudiantes.remote.EstudianteRemoteDataSource
 import edu.sena.caribeapp.domain.estudiantes.model.Estudiante
 import edu.sena.caribeapp.domain.estudiantes.repository.EstudianteRepository
 import edu.sena.caribeapp.util.Resource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -24,28 +26,30 @@ class EstudianteRepositoryImpl @Inject constructor(
 ) : EstudianteRepository { // Implementa la interfaz de dominio
 
     override suspend fun getAllEstudiantes(): Resource<List<Estudiante>> {
-        return try {
-            val response = remoteDataSource.getAllEstudiantes()
-            if (response.isSuccessful && response.body()?.data != null) {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = remoteDataSource.getAllEstudiantes()
+                if (response.isSuccessful && response.body()?.data != null) {
 
-                // Convierte la lista de DTOs a lista de entidades de dominio
-                val estudiantesDto: List<EstudianteDto>? = response.body()!!.data
+                    // Convierte la lista de DTOs a lista de entidades de dominio
+                    val estudiantesDto: List<EstudianteDto>? = response.body()!!.data
 
-                val estudiantes = mapper.run {
-                    estudiantesDto!!.map { it.toDomain() }
+                    val estudiantes = mapper.run {
+                        estudiantesDto!!.map { it.toDomain() }
+                    }
+
+                    Resource.Success(estudiantes)
+                } else {
+                    val errorMessage = response.errorBody()?.string() ?: "Error desconocido al obtener estudiantes"
+                    Resource.Error(errorMessage)
                 }
-
-                Resource.Success(estudiantes)
-            } else {
-                val errorMessage = response.errorBody()?.string() ?: "Error desconocido al obtener estudiantes"
-                Resource.Error(errorMessage)
+            } catch (e: HttpException) {
+                Resource.Error(e.localizedMessage ?: "Error HTTP inesperado")
+            } catch (e: IOException) {
+                Resource.Error("No se pudo conectar al servidor. Revisa tu conexión a internet.")
+            } catch (e: Exception) {
+                Resource.Error(e.localizedMessage ?: "Ocurrió un error inesperado")
             }
-        } catch (e: HttpException) {
-            Resource.Error(e.localizedMessage ?: "Error HTTP inesperado")
-        } catch (e: IOException) {
-            Resource.Error("No se pudo conectar al servidor. Revisa tu conexión a internet.")
-        } catch (e: Exception) {
-            Resource.Error(e.localizedMessage ?: "Ocurrió un error inesperado")
         }
     }
 

@@ -66,8 +66,12 @@ dependencies {
     implementation (libs.kotlinx.coroutines.android)
     implementation(libs.okhttp)
 
+    //hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.fragment)
+    implementation(libs.androidx.hilt.navigation.compose)
+
 
     // Kotlin Coroutines
     implementation(libs.kotlinx.coroutines.android)
