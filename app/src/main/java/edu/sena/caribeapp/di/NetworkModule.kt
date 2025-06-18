@@ -1,9 +1,13 @@
+// app/src/main/java/edu/sena/caribeapp/di/NetworkModule.kt
 package edu.sena.caribeapp.di
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import edu.sena.caribeapp.data.auth.remote.AuthApi // ¡Nueva importación!
+import edu.sena.caribeapp.data.estudiantes.remote.EstudiantesApi // ¡Nueva importación!
+import edu.sena.caribeapp.data.preguntas.remote.PreguntasApi // ¡Nueva importación!
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -19,48 +23,30 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    // URL base de tu API. Para el emulador de Android, localhost es 10.0.2.2
     private const val BASE_URL = "http://10.0.2.2:5100/"
 
-    /**
-     * Provee una instancia de HttpLoggingInterceptor para logging de peticiones HTTP.
-     * Útil para depuración.
-     */
     @Provides
     @Singleton
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY // Logea el cuerpo de la petición y respuesta
+            level = HttpLoggingInterceptor.Level.BODY
         }
     }
 
-    /**
-     * Provee una instancia de OkHttpClient.
-     * Configura el cliente HTTP con el interceptor de logging.
-     */
     @Provides
     @Singleton
     fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor) // Añade el interceptor de logging
-            // Puedes añadir otros interceptores aquí, como para autenticación
+            .addInterceptor(loggingInterceptor)
             .build()
     }
 
-    /**
-     * Provee una instancia de GsonConverterFactory.
-     * Se usa para convertir objetos Kotlin a JSON y viceversa.
-     */
     @Provides
     @Singleton
     fun provideGsonConverterFactory(): GsonConverterFactory {
         return GsonConverterFactory.create()
     }
 
-    /**
-     * Provee una instancia de Retrofit.
-     * Configura Retrofit con la URL base, el cliente OkHttp y el convertidor Gson.
-     */
     @Provides
     @Singleton
     fun provideRetrofit(
@@ -68,9 +54,44 @@ object NetworkModule {
         gsonConverterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL) // Establece la URL base de la API
-            .client(okHttpClient) // Asigna el cliente OkHttp configurado
-            .addConverterFactory(gsonConverterFactory) // Añade el convertidor JSON
+            .baseUrl(BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(gsonConverterFactory)
             .build()
+    }
+
+    // --- Nuevos métodos para proporcionar las interfaces de la API ---
+
+    /**
+     * Provee una instancia de AuthApi.
+     * @param retrofit La instancia de Retrofit, inyectada por Hilt.
+     * @return Una instancia de AuthApi.
+     */
+    @Provides
+    @Singleton
+    fun provideAuthApi(retrofit: Retrofit): AuthApi {
+        return retrofit.create(AuthApi::class.java)
+    }
+
+    /**
+     * Provee una instancia de EstudiantesApi.
+     * @param retrofit La instancia de Retrofit, inyectada por Hilt.
+     * @return Una instancia de EstudiantesApi.
+     */
+    @Provides
+    @Singleton
+    fun provideEstudiantesApi(retrofit: Retrofit): EstudiantesApi {
+        return retrofit.create(EstudiantesApi::class.java)
+    }
+
+    /**
+     * Provee una instancia de PreguntasApi.
+     * @param retrofit La instancia de Retrofit, inyectada por Hilt.
+     * @return Una instancia de PreguntasApi.
+     */
+    @Provides
+    @Singleton
+    fun providePreguntasApi(retrofit: Retrofit): PreguntasApi {
+        return retrofit.create(PreguntasApi::class.java)
     }
 }
