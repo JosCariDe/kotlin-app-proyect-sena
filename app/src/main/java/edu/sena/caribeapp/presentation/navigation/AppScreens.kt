@@ -8,10 +8,7 @@ package edu.sena.caribeapp.presentation.navigation
 sealed class AppScreens(val route: String) {
     object SplashScreen : AppScreens("splash_screen")
     object LoginScreen : AppScreens("login_screen")
-    object RegisterScreen : AppScreens("register_screen")
+    object RegisterScreen : AppScreens("register_screen") // ¡Nueva ruta!
     object HomeScreen : AppScreens("home_screen")
     // Añadir más pantallas aquí a medida que se creen
-    // object DetailScreen : AppScreens("detail_screen/{id}") {
-    //     fun createRoute(id: String) = "detail_screen/$id"
-    // }
 }

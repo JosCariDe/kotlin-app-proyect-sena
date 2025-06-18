@@ -13,9 +13,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import dagger.hilt.android.AndroidEntryPoint // ¡Nueva importación!
-import edu.sena.caribeapp.presentation.navigation.AppScreens // ¡Nueva importación!
-import edu.sena.caribeapp.presentation.splash.SplashScreen // ¡Nueva importación!
+import dagger.hilt.android.AndroidEntryPoint
+import edu.sena.caribeapp.presentation.auth.login.LoginScreen // ¡Nueva importación!
+import edu.sena.caribeapp.presentation.navigation.AppScreens
+import edu.sena.caribeapp.presentation.splash.SplashScreen
 import edu.sena.caribeapp.ui.theme.CaribeAppTheme
 
 /**
@@ -23,7 +24,7 @@ import edu.sena.caribeapp.ui.theme.CaribeAppTheme
  * Anotada con @AndroidEntryPoint para habilitar la inyección de dependencias con Hilt.
  * Contiene el NavHost para la navegación de la aplicación.
  */
-@AndroidEntryPoint // Anotación de Hilt para Activities
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,18 +34,20 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    // Configuración del NavHost para la navegación
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = AppScreens.SplashScreen.route // La pantalla de inicio es el Splash
+                        startDestination = AppScreens.SplashScreen.route
                     ) {
-                        // Define las rutas de navegación
                         composable(route = AppScreens.SplashScreen.route) {
                             SplashScreen(navController = navController)
                         }
-                        // Aquí se añadirán otras pantallas como LoginScreen, HomeScreen, etc.
-                        // composable(route = AppScreens.LoginScreen.route) { LoginScreen(...) }
+                        // ¡Añade esta ruta para la pantalla de Login!
+                        composable(route = AppScreens.LoginScreen.route) {
+                            LoginScreen(navController = navController)
+                        }
+                        // Aquí se añadirán otras pantallas como HomeScreen, etc.
+                        // composable(route = AppScreens.HomeScreen.route) { HomeScreen(...) }
                     }
                 }
             }
