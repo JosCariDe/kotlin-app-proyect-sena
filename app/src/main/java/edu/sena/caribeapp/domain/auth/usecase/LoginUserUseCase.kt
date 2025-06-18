@@ -12,7 +12,7 @@ import javax.inject.Inject
  * @param repository La interfaz del repositorio de autenticación, inyectada por Hilt.
  */
 
-class loginUserUseCase @Inject constructor( // Esta anotación le dice a Hilt cómo crear una instancia de `LoginUserUseCase`
+class LoginUserUseCase @Inject constructor( // Esta anotación le dice a Hilt cómo crear una instancia de `LoginUserUseCase`
     private val repository: AuthRepository
 ) {
     /**

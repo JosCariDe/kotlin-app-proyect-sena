@@ -88,6 +88,10 @@ dependencies {
     // ViewModel utilities for Compose
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
+    //ICONS
+    implementation(libs.androidx.material.icons.core)
+    implementation(libs.androidx.material.icons.extended)
+
     // Pruebas
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
