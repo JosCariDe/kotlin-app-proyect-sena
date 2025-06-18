@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import edu.sena.caribeapp.R // Necesitarás añadir el logo en res/drawable
 import edu.sena.caribeapp.presentation.navigation.AppScreens // Aún no creado, lo haremos después
 import edu.sena.caribeapp.ui.theme.CaribeAppTheme // Tu tema de la app

@@ -14,6 +14,7 @@ android {
     defaultConfig {
         applicationId = "edu.sena.caribeapp"
         minSdk = 24
+        //noinspection OldTargetApi
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
