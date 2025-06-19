@@ -20,7 +20,8 @@ fun CustomTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Next,
     onDone: () -> Unit = {},
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    leadingIcon: @Composable (() -> Unit)? = null
 ) {
     OutlinedTextField(
         value = value,
@@ -35,6 +36,7 @@ fun CustomTextField(
         ),
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        leadingIcon = leadingIcon
     )
 }

@@ -46,8 +46,6 @@ class MainActivity : ComponentActivity() {
                         composable(route = AppScreens.LoginScreen.route) {
                             LoginScreen(navController = navController)
                         }
-                        // Aquí se añadirán otras pantallas como HomeScreen, etc.
-                        // composable(route = AppScreens.HomeScreen.route) { HomeScreen(...) }
                     }
                 }
             }
