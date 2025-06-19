@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Block
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
@@ -50,6 +52,12 @@ fun PasswordTextField(
         value = value,
         onValueChange = onValueChange,
         label = { Text(label) },
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Filled.Lock,
+                contentDescription = "Candado"
+            )
+        },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password, // Tipo de teclado para contraseña
             imeAction = imeAction
