@@ -25,8 +25,8 @@ object NetworkModule {
 
     private const val BASE_URL = "http://10.0.2.2:5100/"
 
-    @Provides
-    @Singleton
+    @Provides // Se coloca con @Provides en vez de @binds, ya que es una libreria,
+    @Singleton          //osea, no es de nuestra propiedad
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -58,6 +58,9 @@ object NetworkModule {
             .client(okHttpClient)
             .addConverterFactory(gsonConverterFactory)
             .build()
+            // .create() No lo vamos a colocar, ya que en las siguientes 3 funciones
+            // se les va agregar en su respectica implementacion
+            //.create(AuthApi::class.java)
     }
 
     // --- Nuevos métodos para proporcionar las interfaces de la API ---
