@@ -9,5 +9,6 @@ data class LoginUiState(
     val password: String = "",
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val isLoadingSuccessFul: Boolean = false
+    val isLoadingSuccessFul: Boolean = false,
+    val bloquearBtnLogin: Boolean = false,
 )

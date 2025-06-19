@@ -1,6 +1,10 @@
 // app/src/main/java/edu/sena/caribeapp/presentation/auth/login/LoginViewModel.kt
 package edu.sena.caribeapp.presentation.auth.login
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -44,9 +48,11 @@ class LoginViewModel @Inject constructor(
      * Intenta iniciar sesión con las credenciales actuales.
      * Lanza una corrutina para ejecutar el Caso de Uso de forma asíncrona.
      */
+    var contadorFallasLogin: Int = 0
     fun login() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null) // Estado de carga
+            var bloquearBtnLogin = false
 
             val email = _uiState.value.email
             val password = _uiState.value.password
@@ -56,6 +62,14 @@ class LoginViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     errorMessage = "Por favor, ingresa tu correo y contraseña."
+                )
+                return@launch
+            }
+
+            if (!email.contains(char = '@', ignoreCase = true)) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = "Por favor, en el correo ingresa un dominio valido"
                 )
                 return@launch
             }
@@ -70,9 +84,15 @@ class LoginViewModel @Inject constructor(
                     // Aquí podrías guardar el token de sesión si lo hubiera
                 }
                 is Resource.Error -> {
+                    contadorFallasLogin++
+                    if (contadorFallasLogin >= 3) {
+                        bloquearBtnLogin = true
+                    }
                     _uiState.value = _uiState.value.copy(
+                        bloquearBtnLogin = bloquearBtnLogin,
                         isLoading = false,
-                        errorMessage = result.message ?: "Error desconocido al iniciar sesión."
+                        errorMessage = result.message ?: "Error desconocido al iniciar sesión.",
+
                     )
                 }
                 is Resource.Loading -> {
