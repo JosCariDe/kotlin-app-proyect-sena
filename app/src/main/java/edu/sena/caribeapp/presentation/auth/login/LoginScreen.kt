@@ -83,7 +83,7 @@ fun LoginScreen(
     // Contenido principal de la pantalla de Login
     LoginContent(
         uiState = uiState,
-        onEmailChange = viewModel::onEmailChange,
+        onEmailChange = viewModel::onEmailChange, // Es equivalente a escribir una lambda así: onEmailChange = { newEmail -> viewModel.onEmailChange(newEmail) }.
         onPasswordChange = viewModel::onPasswordChange,
         onLoginClick = viewModel::login,
         onRegisterClick = { navController.navigate(AppScreens.RegisterScreen.route) } // Navega a registro
