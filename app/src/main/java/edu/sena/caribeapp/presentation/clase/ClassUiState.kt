@@ -7,7 +7,7 @@ import edu.sena.caribeapp.domain.estudiantes.model.Simulacro
 data class ClassUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val clase: ClaseICFES,
+    val clase: ClaseICFES? = null,
     val foros: List<Foro> = emptyList(),
     val simulacros: List<Simulacro> = emptyList()
 )
