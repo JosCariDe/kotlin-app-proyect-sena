@@ -85,6 +85,12 @@ class HomeViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(selectedTab = tab)
     }
 
+    fun onSearchQueryChange(query: String) {
+        _uiState.value = _uiState.value.copy( searchQuery = query )
+    }
+
+
+
     /**
      * Restablece el estado de la UI del HomeScreen.
      */
