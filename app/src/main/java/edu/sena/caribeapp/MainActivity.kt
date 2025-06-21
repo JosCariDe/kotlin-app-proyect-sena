@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import edu.sena.caribeapp.presentation.auth.login.LoginScreen // ¡Nueva importación!
+import edu.sena.caribeapp.presentation.auth.register.RegisterScreen
 import edu.sena.caribeapp.presentation.navigation.AppScreens
 import edu.sena.caribeapp.presentation.splash.SplashScreen
 import edu.sena.caribeapp.ui.theme.CaribeAppTheme
@@ -45,6 +46,11 @@ class MainActivity : ComponentActivity() {
                         // ¡Añade esta ruta para la pantalla de Login!
                         composable(route = AppScreens.LoginScreen.route) {
                             LoginScreen(navController = navController)
+                        }
+
+                        // ¡Añade esta ruta para la pantalla de Register!
+                        composable(route = AppScreens.RegisterScreen.route) {
+                            RegisterScreen(navController = navController)
                         }
                     }
                 }
