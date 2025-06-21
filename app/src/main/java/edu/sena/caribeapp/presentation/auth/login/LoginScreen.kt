@@ -1,6 +1,7 @@
 // app/src/main/java/edu/sena/caribeapp/presentation/auth/login/LoginScreen.kt
 package edu.sena.caribeapp.presentation.auth.login
 
+import android.provider.CalendarContract
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,12 +14,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -29,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.LightingColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import edu.sena.caribeapp.R
 import edu.sena.caribeapp.presentation.common.components.CustomTextField
 import edu.sena.caribeapp.presentation.common.components.PasswordTextField
@@ -105,7 +106,7 @@ fun LoginContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Green), // Color de fondo
+            .background(Color(0xFF7bb369)), // Color de fondo
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -172,7 +173,7 @@ fun LoginContent(
                     onClick = onLoginClick,
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !uiState.isLoading, // Deshabilita el botón durante la carga
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Green) // Color del botón
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7bb369)) // Color del botón
                 ) {
                     if (uiState.isLoading) {
                         CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
@@ -205,7 +206,7 @@ fun LoginContent(
 
                 // Botón de "Sign Up here"
                 TextButton(onClick = onRegisterClick) {
-                    Text("Sign Up here", color = Color.Green, fontWeight = FontWeight.Bold)
+                    Text("Sign Up here", color = Color(0xFF7bb369), fontWeight = FontWeight.Bold)
                 }
             }
         }
