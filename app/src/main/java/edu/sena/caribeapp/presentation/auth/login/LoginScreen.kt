@@ -46,6 +46,9 @@ import edu.sena.caribeapp.presentation.common.components.PasswordTextField
 import edu.sena.caribeapp.presentation.navigation.AppScreens
 import edu.sena.caribeapp.ui.theme.CaribeAppTheme
 
+import edu.sena.caribeapp.ui.theme.Primary
+import edu.sena.caribeapp.ui.theme.Secondary
+
 /**
  * Composable para la pantalla de Login.
  * Muestra la UI de login y maneja las interacciones con el ViewModel.
@@ -108,7 +111,7 @@ fun LoginContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF7bb369)), // Color de fondo
+            .background(Primary), // Color de fondo
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -208,7 +211,7 @@ fun LoginContent(
 
                 // Botón de "Sign Up here"
                 TextButton(onClick = onRegisterClick) {
-                    Text("Sign Up here", color = Color(0xFF7bb369), fontWeight = FontWeight.Bold)
+                    Text("Sign Up here", color = Secondary, fontWeight = FontWeight.Bold)
                 }
             }
         }

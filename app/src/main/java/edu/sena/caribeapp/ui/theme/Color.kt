@@ -1,5 +1,6 @@
 package edu.sena.caribeapp.ui.theme
 
+import android.text.style.BackgroundColorSpan
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -12,3 +13,6 @@ val Pink40 = Color(0xFF7D5260)
 
 val Primary = Color(0xFF7bb369)
 val Secondary = Color(0xFFb3697b)
+
+val PrimaryBackGround = Color(0xFFF1F4F8)
+val PrimaryText = Color(0xFF101213)

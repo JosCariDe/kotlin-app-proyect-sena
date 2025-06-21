@@ -63,6 +63,8 @@ import edu.sena.caribeapp.ui.theme.CaribeAppTheme
 import edu.sena.caribeapp.ui.theme.Purple40 // Color para la tarjeta de clase
 import edu.sena.caribeapp.ui.theme.Purple80 // Color para la tarjeta de clase
 import edu.sena.caribeapp.ui.theme.Primary
+import edu.sena.caribeapp.ui.theme.Secondary
+import edu.sena.caribeapp.ui.theme.PrimaryBackGround
 import java.util.Locale // ¡Nueva importación para Locale!
 
 /**
@@ -128,7 +130,7 @@ fun HomeContent(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background) // Fondo general
+            .background(PrimaryBackGround) // Fondo general
     ) {
         // Sección de Perfil y Búsqueda
         item {
@@ -202,9 +204,8 @@ fun ProfileSection(
                     style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
                 )
                 Text(
-                    text = "Listo para el 400 en el ICFES", // Mensaje estático
+                    text = ("grado: " + estudiante?.grado), // Mensaje estático
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
                 )
             }
         }
@@ -258,7 +259,7 @@ fun ClassCard(clase: ClaseICFES, onClick: (ClaseICFES) -> Unit) {
             .fillMaxWidth()
             .height(150.dp), // Altura fija para la tarjeta
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Purple40), // Color de la tarjeta
+        colors = CardDefaults.cardColors(containerColor = Secondary), // Color de la tarjeta
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         onClick = { onClick(clase) } // Maneja el clic en la tarjeta
     ) {
@@ -380,12 +381,12 @@ fun ForumCard(foro: Foro, onClick: (Foro) -> Unit) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = foro.nombre,
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 22.sp)
             )
             Text(
                 text = "Creado Por: ${foro.creador}",
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray
+                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 15.sp),
+
             )
             Spacer(modifier = Modifier.height(8.dp))
             Divider()
@@ -397,12 +398,12 @@ fun ForumCard(foro: Foro, onClick: (Foro) -> Unit) {
             ) {
                 Text(
                     text = "Creado el ${foro.fecha.substringBefore("T")}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
+                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 15.sp),
+                    color = Secondary
                 )
                 Button(
                     onClick = { onClick(foro) },
-                    colors = ButtonDefaults.buttonColors(containerColor = Purple80)
+                    colors = ButtonDefaults.buttonColors(containerColor = Secondary)
                 ) {
                     Text("Entrar")
                 }
@@ -423,19 +424,22 @@ fun SimulacroCard(simulacro: Simulacro, onClick: (Simulacro) -> Unit) {
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         onClick = { onClick(simulacro) }
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth() // <--- AÑADE ESTO
+                .padding(16.dp)
+        ) {
             Text(
                 text = simulacro.titulo,
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 20.sp)
             )
             Text(
                 text = "Área: ${simulacro.area}",
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray
+                style = MaterialTheme.typography.bodyMedium,
             )
             Text(
                 text = "Estado: ${simulacro.estado.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}", // ¡Corregido!
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = when (simulacro.estado) {
                     "completado" -> Color.Green
                     "pendiente" -> Color.Red
@@ -447,7 +451,7 @@ fun SimulacroCard(simulacro: Simulacro, onClick: (Simulacro) -> Unit) {
             Button(
                 onClick = { onClick(simulacro) },
                 modifier = Modifier.align(Alignment.End),
-                colors = ButtonDefaults.buttonColors(containerColor = Purple80)
+                colors = ButtonDefaults.buttonColors(containerColor = Secondary)
             ) {
                 Text("Ver Detalles")
             }
