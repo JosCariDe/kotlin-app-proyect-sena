@@ -58,7 +58,7 @@ class LoginViewModel @Inject constructor(
                         isLoadingSuccessFul = true,
                         errorMessage = null
                     )
-                    // ¡Pasa el ID del estudiante al navegar!
+                    // Pasa el ID del estudiante al navegar
                     result.data?.id?.let { estudianteId ->
                         _navigateToHome.value = estudianteId
                     }

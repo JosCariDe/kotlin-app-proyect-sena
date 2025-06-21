@@ -8,7 +8,7 @@ package edu.sena.caribeapp.presentation.navigation
 sealed class AppScreens(val route: String) {
     object SplashScreen : AppScreens("splash_screen")
     object LoginScreen : AppScreens("login_screen")
-    object RegisterScreen : AppScreens("register_screen") // ¡Nueva ruta!
+    object RegisterScreen : AppScreens("register_screen")
     object HomeScreen : AppScreens("home_screen/{estudianteId}") {
         // Función auxiliar para construir la ruta con un ID real
         fun createRoute(estudianteId: String) = "home_screen/$estudianteId"
