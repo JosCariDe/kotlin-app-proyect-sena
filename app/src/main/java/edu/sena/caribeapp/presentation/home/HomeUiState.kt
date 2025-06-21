@@ -19,5 +19,8 @@ data class HomeUiState(
     val clasesICFES: List<ClaseICFES> = emptyList(),
     val foros: List<Foro> = emptyList(),
     val simulacros: List<Simulacro> = emptyList(),
-    val selectedTab: HomeTab = HomeTab.FOROS // Pestaña por defecto
+    val selectedTab: HomeTab = HomeTab.FOROS, // Pestaña por defecto
+    val mensajeBienvenidaPredeterminado: String = "Bienvenido a PREPARATE ICFES CARIBE",
+    // Nuevo atributo: función anónima opcional para un saludo personalizado
+    val accionBienvenidaPersonalizada: ((String) -> Unit)? = null
 )
