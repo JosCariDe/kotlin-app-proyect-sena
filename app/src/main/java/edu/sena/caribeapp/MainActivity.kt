@@ -10,12 +10,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import edu.sena.caribeapp.presentation.auth.login.LoginScreen // ¡Nueva importación!
 import edu.sena.caribeapp.presentation.auth.register.RegisterScreen
+import edu.sena.caribeapp.presentation.home.HomeScreen
 import edu.sena.caribeapp.presentation.navigation.AppScreens
 import edu.sena.caribeapp.presentation.splash.SplashScreen
 import edu.sena.caribeapp.ui.theme.CaribeAppTheme
@@ -51,6 +54,23 @@ class MainActivity : ComponentActivity() {
                         // ¡Añade esta ruta para la pantalla de Register!
                         composable(route = AppScreens.RegisterScreen.route) {
                             RegisterScreen(navController = navController)
+                        }
+                        // Ruta de Home con el Id de estudiante
+                        composable(
+                            route = AppScreens.HomeScreen.route,
+                            arguments = listOf(navArgument("estudianteId") { type = NavType.StringType })
+                        ) { backStackEntry ->
+                            // Extrae el argumento estudianteId de backStackEntry
+                            val estudianteId = backStackEntry.arguments?.getString("estudianteId")
+                            // Asegúrate de que el ID no sea nulo antes de pasar a HomeScreen
+                            if (estudianteId != null) {
+                                HomeScreen(navController = navController) // HomeScreen obtendrá el ID del ViewModel
+                            } else {
+                                // Manejar el caso de ID nulo, quizás navegar de vuelta a Login
+                                navController.navigate(AppScreens.LoginScreen.route) {
+                                    popUpTo(AppScreens.SplashScreen.route) { inclusive = true }
+                                }
+                            }
                         }
                     }
                 }
