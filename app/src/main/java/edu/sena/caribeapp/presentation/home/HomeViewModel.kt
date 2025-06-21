@@ -1,10 +1,12 @@
+// app/src/main/java/edu/sena/caribeapp/presentation/home/HomeViewModel.kt
 package edu.sena.caribeapp.presentation.home
 
+import androidx.lifecycle.SavedStateHandle // ¡Nueva importación!
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.sena.caribeapp.domain.estudiantes.model.Estudiante
-import edu.sena.caribeapp.domain.estudiantes.usecase.GetEstudianteByIdUseCase // Caso de Uso para obtener estudiante
+import edu.sena.caribeapp.domain.estudiantes.usecase.GetEstudianteByIdUseCase
 import edu.sena.caribeapp.util.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,18 +20,19 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getEstudianteByIdUseCase: GetEstudianteByIdUseCase // Inyecta el Caso de Uso
-    // Aquí se inyectarían otros Casos de Uso si hubiera endpoints separados para foros/simulacros
+    private val getEstudianteByIdUseCase: GetEstudianteByIdUseCase,
+    private val savedStateHandle: SavedStateHandle // ¡Inyecta SavedStateHandle!
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-    // ID del estudiante logueado (simulado por ahora, en una app real se obtendría de la sesión)
-    private val loggedInEstudianteId: String = "6845d826441f914e0a7475d2" // ID de ejemplo de tu JSON
+    // Obtiene el ID del estudiante de los argumentos de navegación
+    private val estudianteId: String = savedStateHandle.get<String>("estudianteId")
+        ?: throw IllegalStateException("Estudiante ID no encontrado en los argumentos de navegación.")
 
     init {
-        // Cuando el ViewModel se crea, inicia la carga de datos
+        // Cuando el ViewModel se crea, inicia la carga de datos usando el ID obtenido
         loadHomeScreenData()
     }
 
@@ -41,20 +44,20 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
 
-            when (val result = getEstudianteByIdUseCase(loggedInEstudianteId)) {
+            when (val result = getEstudianteByIdUseCase(estudianteId)) { // ¡Usa el ID obtenido!
                 is Resource.Success -> {
                     val estudiante = result.data
                     if (estudiante != null) {
                         _uiState.value = _uiState.value.copy(
                             isLoading = false,
                             estudiante = estudiante,
-                            clasesICFES = estudiante.clasesICFES ?: emptyList(), // Si es nulo, lista vacía
-                            foros = estudiante.clasesICFES?.flatMap { it.foros } ?: emptyList(), // Extrae todos los foros de todas las clases
-                            simulacros = estudiante.clasesICFES?.flatMap { it.simulacros } ?: emptyList(), // Extrae todos los simulacros
+                            clasesICFES = estudiante.clasesICFES ?: emptyList(),
+                            foros = estudiante.clasesICFES?.flatMap { it.foros } ?: emptyList(),
+                            simulacros = estudiante.clasesICFES?.flatMap { it.simulacros } ?: emptyList(),
                             errorMessage = null
                         )
                         // Si el usuario añadió una acción de bienvenida personalizada, la invocamos aquí
-                        _uiState.value.accionBienvenidaPersonalizada?.invoke(estudiante.nombreCompleto)
+                        // _uiState.value.accionBienvenidaPersonalizada?.invoke(estudiante.nombreCompleto)
                     } else {
                         _uiState.value = _uiState.value.copy(
                             isLoading = false,
@@ -87,10 +90,5 @@ class HomeViewModel @Inject constructor(
      */
     fun resetUiState() {
         _uiState.value = HomeUiState()
-    }
-
-    // Barra de busqueda
-    fun onSearchQueryChange(query: String) {
-        _uiState.value = _uiState.value.copy(searchQuery = query)
     }
 }

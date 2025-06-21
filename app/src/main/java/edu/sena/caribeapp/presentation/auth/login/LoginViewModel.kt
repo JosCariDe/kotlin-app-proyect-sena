@@ -1,10 +1,6 @@
 // app/src/main/java/edu/sena/caribeapp/presentation/auth/login/LoginViewModel.kt
 package edu.sena.caribeapp.presentation.auth.login
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,54 +18,35 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUserUseCase: LoginUserUseCase // Inyecta el Caso de Uso de Login
+    private val loginUserUseCase: LoginUserUseCase
 ) : ViewModel() {
 
-    // Estado mutable interno de la UI de Login
     private val _uiState = MutableStateFlow(LoginUiState())
-    // Estado inmutable expuesto a la UI
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
-    /**
-     * Actualiza el valor del correo electrónico en el estado de la UI.
-     */
+    // Nuevo StateFlow para la navegación, para que la UI pueda reaccionar
+    private val _navigateToHome = MutableStateFlow<String?>(null)
+    val navigateToHome: StateFlow<String?> = _navigateToHome.asStateFlow()
+
     fun onEmailChange(email: String) {
         _uiState.value = _uiState.value.copy(email = email, errorMessage = null)
     }
 
-    /**
-     * Actualiza el valor de la contraseña en el estado de la UI.
-     */
     fun onPasswordChange(password: String) {
         _uiState.value = _uiState.value.copy(password = password, errorMessage = null)
     }
 
-    /**
-     * Intenta iniciar sesión con las credenciales actuales.
-     * Lanza una corrutina para ejecutar el Caso de Uso de forma asíncrona.
-     */
-    var contadorFallasLogin: Int = 0
     fun login() {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null) // Estado de carga
-            var bloquearBtnLogin = false
+            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
 
             val email = _uiState.value.email
             val password = _uiState.value.password
 
-            // Validaciones básicas antes de llamar al caso de uso
             if (email.isBlank() || password.isBlank()) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     errorMessage = "Por favor, ingresa tu correo y contraseña."
-                )
-                return@launch
-            }
-
-            if (!email.contains(char = '@', ignoreCase = true)) {
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    errorMessage = "Por favor, en el correo ingresa un dominio valido"
                 )
                 return@launch
             }
@@ -81,18 +58,15 @@ class LoginViewModel @Inject constructor(
                         isLoadingSuccessFul = true,
                         errorMessage = null
                     )
-                    // Aquí podrías guardar el token de sesión si lo hubiera
+                    // ¡Pasa el ID del estudiante al navegar!
+                    result.data?.id?.let { estudianteId ->
+                        _navigateToHome.value = estudianteId
+                    }
                 }
                 is Resource.Error -> {
-                    contadorFallasLogin++
-                    if (contadorFallasLogin >= 3) {
-                        bloquearBtnLogin = true
-                    }
                     _uiState.value = _uiState.value.copy(
-                        bloquearBtnLogin = bloquearBtnLogin,
                         isLoading = false,
-                        errorMessage = result.message ?: "Error desconocido al iniciar sesión.",
-
+                        errorMessage = result.message ?: "Error desconocido al iniciar sesión."
                     )
                 }
                 is Resource.Loading -> {
@@ -103,9 +77,12 @@ class LoginViewModel @Inject constructor(
     }
 
     /**
-     * Restablece el estado de la UI de login.
-     * Útil después de un login exitoso o para limpiar errores.
+     * Función para indicar que la navegación a Home ha sido manejada.
      */
+    fun onNavigationHandled() {
+        _navigateToHome.value = null
+    }
+
     fun resetUiState() {
         _uiState.value = LoginUiState()
     }
