@@ -88,4 +88,9 @@ class HomeViewModel @Inject constructor(
     fun resetUiState() {
         _uiState.value = HomeUiState()
     }
+
+    // Barra de busqueda
+    fun onSearchQueryChange(query: String) {
+        _uiState.value = _uiState.value.copy(searchQuery = query)
+    }
 }
