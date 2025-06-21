@@ -18,64 +18,45 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val registerUserUseCase: RegisterUserUseCase // Inyecta el Caso de Uso de Registro
+    private val registerUserUseCase: RegisterUserUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RegisterUiState())
     val uiState: StateFlow<RegisterUiState> = _uiState.asStateFlow()
 
-    /**
-     * Actualiza el valor del nombre completo en el estado de la UI.
-     */
+    // Nuevo StateFlow para la navegación, para que la UI pueda reaccionar
+    private val _navigateToHome = MutableStateFlow<String?>(null)
+    val navigateToHome: StateFlow<String?> = _navigateToHome.asStateFlow()
+
     fun onFullNameChange(fullName: String) {
         _uiState.value = _uiState.value.copy(fullName = fullName, errorMessage = null)
     }
 
-    /**
-     * Actualiza el valor del correo electrónico en el estado de la UI.
-     */
     fun onEmailChange(email: String) {
         _uiState.value = _uiState.value.copy(email = email, errorMessage = null)
     }
 
-    /**
-     * Actualiza el valor de la contraseña en el estado de la UI.
-     */
     fun onPasswordChange(password: String) {
         _uiState.value = _uiState.value.copy(password = password, errorMessage = null)
     }
 
-    /**
-     * Actualiza el valor del departamento en el estado de la UI.
-     */
     fun onDepartmentChange(department: String) {
         _uiState.value = _uiState.value.copy(department = department, errorMessage = null)
     }
 
-    /**
-     * Actualiza el valor del municipio en el estado de la UI.
-     */
     fun onMunicipalityChange(municipality: String) {
         _uiState.value = _uiState.value.copy(municipality = municipality, errorMessage = null)
     }
 
-    /**
-     * Actualiza el valor del grado en el estado de la UI.
-     */
     fun onGradeChange(grade: String) {
         _uiState.value = _uiState.value.copy(grade = grade, errorMessage = null)
     }
 
-    /**
-     * Intenta registrar un nuevo usuario con los datos actuales.
-     * Lanza una corrutina para ejecutar el Caso de Uso de forma asíncrona.
-     */
     fun register() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
 
             val currentState = _uiState.value
-            // Validaciones básicas antes de llamar al caso de uso
             if (currentState.fullName.isBlank() || currentState.email.isBlank() ||
                 currentState.password.isBlank() || currentState.department.isBlank() ||
                 currentState.municipality.isBlank() || currentState.grade.isBlank()) {
@@ -100,6 +81,10 @@ class RegisterViewModel @Inject constructor(
                         isRegisterSuccessful = true,
                         errorMessage = null
                     )
+                    // ¡Pasa el ID del estudiante al navegar!
+                    result.data?.id?.let { estudianteId ->
+                        _navigateToHome.value = estudianteId
+                    }
                 }
                 is Resource.Error -> {
                     _uiState.value = currentState.copy(
@@ -108,16 +93,19 @@ class RegisterViewModel @Inject constructor(
                     )
                 }
                 is Resource.Loading -> {
-                    // El estado de carga ya se manejó al inicio de la función
+                    // Estado de carga ya manejado
                 }
             }
         }
     }
 
     /**
-     * Restablece el estado de la UI de registro.
-     * Útil después de un registro exitoso o para limpiar errores.
+     * Función para indicar que la navegación a Home ha sido manejada.
      */
+    fun onNavigationHandled() {
+        _navigateToHome.value = null
+    }
+
     fun resetUiState() {
         _uiState.value = RegisterUiState()
     }

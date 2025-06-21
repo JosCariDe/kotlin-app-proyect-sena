@@ -60,23 +60,25 @@ fun LoginScreen(
 ) {
     // Observa el estado de la UI del ViewModel
     val uiState by viewModel.uiState.collectAsState()
+    val navigateToHome by viewModel.navigateToHome.collectAsState() //Observacion para navegacion
     val context = LocalContext.current // Obtiene el contexto de Android para mostrar Toasts
 
     // LaunchedEffect para manejar efectos secundarios (navegación, mostrar Toast)
-    LaunchedEffect(key1 = uiState.errorMessage, key2 = uiState.isLoadingSuccessFul) {
+    LaunchedEffect(key1 = uiState.errorMessage, key2 = navigateToHome) {
         // Muestra Toast si hay un mensaje de error
         uiState.errorMessage?.let { message ->
             Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             viewModel.resetUiState() // Limpia el estado del error después de mostrarlo
         }
 
-        // Navega a HomeScreen si el login fue exitoso
-        if (uiState.isLoadingSuccessFul) {
-            navController.navigate(AppScreens.HomeScreen.route) {
+        // Navega a HomeScreen si el login fue exitoso y tenemos un ID de estudiante
+        navigateToHome?.let { estudianteId -> // ¡Cambiado!
+            navController.navigate(AppScreens.HomeScreen.createRoute(estudianteId)) { // ¡Cambiado!
                 popUpTo(AppScreens.LoginScreen.route) {
-                    inclusive = true // Elimina LoginScreen de la pila
+                    inclusive = true
                 }
             }
+            viewModel.onNavigationHandled() // Notifica al ViewModel que la navegación fue manejada
             viewModel.resetUiState() // Restablece el estado después de la navegación
         }
     }

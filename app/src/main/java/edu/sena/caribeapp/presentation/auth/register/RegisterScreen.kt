@@ -60,23 +60,26 @@ fun RegisterScreen(
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val navigateToHome by viewModel.navigateToHome.collectAsState()
     val context = LocalContext.current
 
-    LaunchedEffect(key1 = uiState.errorMessage, key2 = uiState.isRegisterSuccessful) {
+    LaunchedEffect(key1 = uiState.errorMessage, key2 = navigateToHome) {
         uiState.errorMessage?.let { message ->
             Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             viewModel.resetUiState()
         }
 
-        if (uiState.isRegisterSuccessful) {
+        navigateToHome?.let { estudianteId -> // ¡Cambiado!
             Toast.makeText(context, "Registro exitoso. ¡Bienvenido!", Toast.LENGTH_LONG).show()
-            navController.navigate(AppScreens.HomeScreen.route) { // Navega a Home después del registro
-                popUpTo(AppScreens.LoginScreen.route) { // Elimina Login y Register de la pila
+            navController.navigate(AppScreens.HomeScreen.createRoute(estudianteId)) { // ¡Cambiado!
+                popUpTo(AppScreens.LoginScreen.route) {
                     inclusive = true
                 }
             }
+            viewModel.onNavigationHandled() // Notifica al ViewModel que la navegación fue manejada
             viewModel.resetUiState()
         }
+
     }
 
     RegisterContent(
