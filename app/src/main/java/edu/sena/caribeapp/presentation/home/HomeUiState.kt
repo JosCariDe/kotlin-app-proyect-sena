@@ -22,5 +22,6 @@ data class HomeUiState(
     val selectedTab: HomeTab = HomeTab.FOROS, // Pestaña por defecto
     val mensajeBienvenidaPredeterminado: String = "Bienvenido a PREPARATE ICFES CARIBE",
     // Nuevo atributo: función anónima opcional para un saludo personalizado
-    val accionBienvenidaPersonalizada: ((String) -> Unit)? = null
+    val accionBienvenidaPersonalizada: ((String) -> Unit)? = null,
+    val searchQuery: String = ""
 )
