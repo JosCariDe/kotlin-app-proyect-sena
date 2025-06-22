@@ -33,7 +33,8 @@ class ClassViewModel @Inject constructor(
         ?: throw IllegalStateException("Clase ID no encontrado en los argumentos de navegación.")
 
     // ID del estudiante logueado (simulado por ahora, en una app real se obtendría de la sesión)
-    private val loggedInEstudianteId: String = "6845d826441f914e0a7475d2" // ID de ejemplo de tu JSON
+    private val loggedInEstudianteId: String = savedStateHandle.get<String>("estudianteId")
+        ?: throw IllegalStateException("Estudiante Id No encontrado en los argumentos de navegacion")
 
     init {
         loadClassData()

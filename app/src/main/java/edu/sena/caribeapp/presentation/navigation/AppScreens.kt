@@ -13,5 +13,8 @@ sealed class AppScreens(val route: String) {
         // Función auxiliar para construir la ruta con un ID real
         fun createRoute(estudianteId: String) = "home_screen/$estudianteId"
     }
+    object ClassScreen : AppScreens("class_screen/{claseId}/{estudianteId}") {
+        fun createRoute(claseId: String, estudianteId: String) = "class_screen/$claseId/$estudianteId"
+    }
     // Añadir más pantallas aquí a medida que se creen
 }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -58,6 +59,7 @@ import edu.sena.caribeapp.domain.estudiantes.model.ClaseICFES
 import edu.sena.caribeapp.domain.estudiantes.model.Estudiante
 import edu.sena.caribeapp.domain.estudiantes.model.Foro
 import edu.sena.caribeapp.domain.estudiantes.model.Simulacro
+import edu.sena.caribeapp.presentation.navigation.AppScreens
 import edu.sena.caribeapp.ui.theme.CaribeAppTheme
 
 import edu.sena.caribeapp.ui.theme.Purple40 // Color para la tarjeta de clase
@@ -107,7 +109,9 @@ fun HomeScreen(
             uiState = uiState,
             onTabSelected = viewModel::onTabSelected,
             onSearchQueryChange = viewModel::onSearchQueryChange,
-            onClassClick = { clase -> /* TODO: Navegar a ClaseDetailScreen */ },
+            onClassClick = { clase -> // ¡Modificado!
+                uiState.estudiante?.let { navController.navigate(AppScreens.ClassScreen.createRoute(clase.id, estudianteId =it.id )) }
+            },
             onForumClick = { foro -> /* TODO: Navegar a ForoDetailScreen */ },
             onSimulacroClick = { simulacro -> /* TODO: Navegar a SimulacroDetailScreen */ }
         )
@@ -130,6 +134,7 @@ fun HomeContent(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
+            .padding(top = 10.dp)
             .background(PrimaryBackGround) // Fondo general
     ) {
         // Sección de Perfil y Búsqueda
@@ -241,10 +246,13 @@ fun ClassesSection(
         } else {
             // Usar LazyRow si hubiera muchas clases y quisieras un scroll horizontal
             // Por ahora, un Column simple para mostrar una o dos
-            clases.forEach { clase ->
-                ClassCard(clase = clase, onClick = onClassClick)
-                Spacer(modifier = Modifier.height(8.dp))
+            LazyRow {
+                items (clases) { clase ->
+                    ClassCard(clase = clase, onClick = onClassClick)
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
             }
+
         }
     }
 }

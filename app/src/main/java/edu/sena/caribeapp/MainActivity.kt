@@ -18,6 +18,7 @@ import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import edu.sena.caribeapp.presentation.auth.login.LoginScreen // ¡Nueva importación!
 import edu.sena.caribeapp.presentation.auth.register.RegisterScreen
+import edu.sena.caribeapp.presentation.clase.ClassScreen
 import edu.sena.caribeapp.presentation.home.HomeScreen
 import edu.sena.caribeapp.presentation.navigation.AppScreens
 import edu.sena.caribeapp.presentation.splash.SplashScreen
@@ -70,6 +71,20 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate(AppScreens.LoginScreen.route) {
                                     popUpTo(AppScreens.SplashScreen.route) { inclusive = true }
                                 }
+                            }
+                        }
+                        //RUta para clase
+                        composable(
+                            route = AppScreens.ClassScreen.route,
+                            arguments = listOf(navArgument("claseId") { type = NavType.StringType },navArgument("estudianteId") { type = NavType.StringType } )
+                        ) { backStackEntry ->
+                            val claseId = backStackEntry.arguments?.getString("claseId")
+                            val estudianteId = backStackEntry.arguments?.getString("estudianteId")
+                            if (claseId != null && estudianteId != null) {
+                                ClassScreen(navController = navController)
+                            } else {
+                                // Manejar el caso de ID nulo, quizás navegar de vuelta a HomeScreen
+                                // o mostrar un error
                             }
                         }
                     }
