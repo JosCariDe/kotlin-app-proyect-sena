@@ -57,7 +57,7 @@ fun ProgressBarWithText(
                 .padding(start = 8.dp)
                 .clip(RoundedCornerShape(4.dp)),
             color = Secondary, // Color del progreso completado
-            trackColor = Primary.copy(alpha = 0.3f), // Color de la barra de progreso sin completar
+            trackColor = Secondary.copy(alpha = 0.3f), // Color de la barra de progreso sin completar
         )
     }
 
