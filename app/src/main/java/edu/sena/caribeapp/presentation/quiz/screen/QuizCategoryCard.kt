@@ -64,7 +64,7 @@ fun QuizCategoryCard(
             }
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "QUESTION $questionNumbrer OF $totalQuestions",
+                text = "PREGUNTA $questionNumbrer DE $totalQuestions",
                 style = MaterialTheme.typography.labelSmall,
                 color = Color.Gray,
                 fontSize = 12.sp
