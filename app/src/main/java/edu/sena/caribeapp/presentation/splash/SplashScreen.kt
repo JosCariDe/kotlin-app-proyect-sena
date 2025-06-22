@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import edu.sena.caribeapp.R // Necesitarás añadir el logo en res/drawable
 import edu.sena.caribeapp.presentation.navigation.AppScreens // Aún no creado, lo haremos después
 import edu.sena.caribeapp.ui.theme.CaribeAppTheme // Tu tema de la app
+import edu.sena.caribeapp.ui.theme.Primary
 
 /**
  * Composable para la pantalla de Splash.
@@ -73,7 +74,7 @@ fun SplashContent() {
     Column(
         modifier = Modifier
             .fillMaxSize() // Ocupa toda la pantalla
-            .background(Color.Green), // Color de fondo (asegúrate de que Green80 esté en Color.kt)
+            .background(Primary), // Color de fondo (asegúrate de que Green80 esté en Color.kt)
         verticalArrangement = Arrangement.Center, // Centra verticalmente
         horizontalAlignment = Alignment.CenterHorizontally // Centra horizontalmente
     ) {

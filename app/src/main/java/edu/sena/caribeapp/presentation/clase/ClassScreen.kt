@@ -130,6 +130,7 @@ fun ClassContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(top = 10.dp)
             .background(Primary) // Fondo verde
     ) {
         // Barra superior con botón de retroceso y nombre de la clase
@@ -159,9 +160,9 @@ fun ClassContent(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("12 miembros")
+            Text("# miembros")
             Row {
-                // Aquí irían las imágenes de los participantes si las tuvieras
+                // Aquí irían las imágenes de los participantes
                 // Image(...)
             }
             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Ver miembros", modifier = Modifier.size(16.dp))
