@@ -16,11 +16,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
+import edu.sena.caribeapp.domain.estudiantes.model.Simulacro
 import edu.sena.caribeapp.presentation.auth.login.LoginScreen // ¡Nueva importación!
 import edu.sena.caribeapp.presentation.auth.register.RegisterScreen
 import edu.sena.caribeapp.presentation.clase.ClassScreen
 import edu.sena.caribeapp.presentation.home.HomeScreen
 import edu.sena.caribeapp.presentation.navigation.AppScreens
+import edu.sena.caribeapp.presentation.simulacro.SimulacroScreen
 import edu.sena.caribeapp.presentation.splash.SplashScreen
 import edu.sena.caribeapp.ui.theme.CaribeAppTheme
 
@@ -82,6 +84,21 @@ class MainActivity : ComponentActivity() {
                             val estudianteId = backStackEntry.arguments?.getString("estudianteId")
                             if (claseId != null && estudianteId != null) {
                                 ClassScreen(navController = navController)
+                            } else {
+                                // Manejar el caso de ID nulo, quizás navegar de vuelta a HomeScreen
+                                // o mostrar un error
+                            }
+                        }
+                        //Ruta para simulacro
+                        composable (
+                            route = AppScreens.SimulacroScreen.route,
+                            arguments = listOf(navArgument("estudianteId") {type = NavType.StringType}, navArgument("claseId") {type = NavType.StringType}, navArgument("simulacroId") {type = NavType.StringType} )
+                        ) { backStackEntry ->
+                            val estudianteId = backStackEntry.arguments?.getString("estudianteId")
+                            val claseId = backStackEntry.arguments?.getString("claseId")
+                            val simulacroId = backStackEntry.arguments?.getString("simulacroId")
+                            if (estudianteId != null && claseId != null  && simulacroId != null ) {
+                                SimulacroScreen(navController = navController)
                             } else {
                                 // Manejar el caso de ID nulo, quizás navegar de vuelta a HomeScreen
                                 // o mostrar un error

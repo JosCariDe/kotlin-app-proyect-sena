@@ -1,6 +1,8 @@
 // app/src/main/java/edu/sena/caribeapp/presentation/navigation/AppScreens.kt
 package edu.sena.caribeapp.presentation.navigation
 
+import edu.sena.caribeapp.domain.estudiantes.model.Simulacro
+
 /**
  * Clase sellada (sealed class) que define todas las rutas de navegación de la aplicación.
  * Esto proporciona seguridad de tipos y centraliza las rutas.
@@ -15,6 +17,9 @@ sealed class AppScreens(val route: String) {
     }
     object ClassScreen : AppScreens("class_screen/{claseId}/{estudianteId}") {
         fun createRoute(claseId: String, estudianteId: String) = "class_screen/$claseId/$estudianteId"
+    }
+    object SimulacroScreen: AppScreens("simulacro_screen/{estudianteId}/{claseId}/{simulacroId}") {
+        fun createRoute(estudianteId: String, claseId: String, simulacroId: String) = "simulacro_screen/$estudianteId/$claseId/$simulacroId"
     }
     // Añadir más pantallas aquí a medida que se creen
 }
