@@ -199,18 +199,19 @@ fun ClassContent(
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     // Imágenes de los participantes (simuladas o reales si hay URLs)
-                    clase.participantes.take(3).forEachIndexed { index, _ -> // No necesitamos el objeto participante si no tiene imagen
-                        Icon(
-                            imageVector = Icons.Filled.Person, // Icono de persona para representar un avatar vacío
-                            contentDescription = "Miembro",
-                            modifier = Modifier
-                                .size(30.dp)
-                                .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.surfaceVariant) // Un color de fondo para el círculo
-                                .padding(end = if (index < 2) (-8).dp else 0.dp), // Superponer iconos
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant // Color del icono
-                        )
-                    }
+                    clase.participantes.take(3)
+                        .forEachIndexed { index, _ -> // No necesitamos el objeto participante si no tiene imagen
+                            Icon(
+                                imageVector = Icons.Filled.Person, // Icono de persona para representar un avatar vacío
+                                contentDescription = "Miembro",
+                                modifier = Modifier
+                                    .size(30.dp)
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.surfaceVariant) // Un color de fondo para el círculo
+                                    .padding(end = if (index < 2) (-8).dp else 0.dp), // Superponer iconos
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant // Color del icono
+                            )
+                        }
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(
                         Icons.AutoMirrored.Filled.ArrowForward,
@@ -283,12 +284,13 @@ fun ClassContent(
                 }
             } else {
                 items(filteredSimulacros) { simulacro ->
-                    //ClassSimulacroCard(simulacro = simulacro, onClick = onSimulacroClick)
+                    ClassSimulacroCard(simulacro = simulacro, onClick = onSimulacroClick)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
         }
     }
+}
 
 
 @Composable
@@ -353,7 +355,11 @@ fun ClassSimulacroCard(simulacro: Simulacro, onClick: (Simulacro) -> Unit) {
                     )
                 ) {
                     Text(
-                        text = simulacro.estado.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() },
+                        text = simulacro.estado.replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(
+                                Locale.getDefault()
+                            ) else it.toString()
+                        },
                         color = Color.White,
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
@@ -362,4 +368,5 @@ fun ClassSimulacroCard(simulacro: Simulacro, onClick: (Simulacro) -> Unit) {
             }
         }
     }
-}}
+}
+
