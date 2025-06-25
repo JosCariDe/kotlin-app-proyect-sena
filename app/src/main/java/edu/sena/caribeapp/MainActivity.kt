@@ -21,6 +21,7 @@ import edu.sena.caribeapp.presentation.auth.register.RegisterScreen
 import edu.sena.caribeapp.presentation.clase.ClassScreen
 import edu.sena.caribeapp.presentation.home.HomeScreen
 import edu.sena.caribeapp.presentation.navigation.AppScreens
+import edu.sena.caribeapp.presentation.quiz.screen.QuizScreen
 import edu.sena.caribeapp.presentation.simulacro.SimulacroScreen
 import edu.sena.caribeapp.presentation.splash.SplashScreen
 import edu.sena.caribeapp.ui.theme.CaribeAppTheme
@@ -98,6 +99,21 @@ class MainActivity : ComponentActivity() {
                             val simulacroId = backStackEntry.arguments?.getString("simulacroId")
                             if (estudianteId != null && claseId != null  && simulacroId != null ) {
                                 SimulacroScreen(navController = navController)
+                            } else {
+                                // Manejar el caso de ID nulo, quizás navegar de vuelta a HomeScreen
+                                // o mostrar un error
+                            }
+                        }
+
+                        composable (
+                            route = AppScreens.QuizScreen.route,
+                            arguments = listOf(navArgument("preguntaId") {type = NavType.StringType}, navArgument("indexActual") {type = NavType.IntType}, navArgument("cantidadPreguntas") {type = NavType.IntType} )
+                        ) { backStackEntry ->
+                            val preguntaId = backStackEntry.arguments?.getString("preguntaId")
+                            val indexActual = backStackEntry.arguments?.getInt("indexActual")
+                            val cantidadPreguntas = backStackEntry.arguments?.getString("cantidadPreguntas")
+                            if (preguntaId != null && indexActual != null  && cantidadPreguntas != null ) {
+                                QuizScreen(navController = navController)
                             } else {
                                 // Manejar el caso de ID nulo, quizás navegar de vuelta a HomeScreen
                                 // o mostrar un error

@@ -25,10 +25,10 @@ class QuizViewModel @Inject constructor(
     private val idPregunta: String = savedStateHandle.get<String>("preguntaId")
         ?: throw IllegalStateException("Id Pregunta NO ENCONTRADO en los parametros de navegacion")
 
-    private val preguntaActual: String = savedStateHandle.get<String>("indexActual")
+    private val preguntaActual: Int = savedStateHandle.get<Int>("indexActual")
         ?: throw IllegalStateException("indice de la pregunta NO ENCONTRADO en los parametros de navegacion")
 
-    private val cantidadPreguntas: String = savedStateHandle.get<String>("cantidadPreguntas")
+    private val cantidadPreguntas: Int = savedStateHandle.get<Int>("cantidadPreguntas")
         ?: throw IllegalStateException("Id Pregunta NO ENCONTRADO en los parametros de navegacion")
 
     fun loadQuizData() {
@@ -43,6 +43,8 @@ class QuizViewModel @Inject constructor(
                         _uiState.value = _uiState.value.copy(
                             isLoading = false,
                             pregunta = pregunta,
+                            indexPreguntaActual = preguntaActual,
+                            cantidadPreguntas = cantidadPreguntas,
                             erroMessage = null
                         )
 
@@ -68,7 +70,7 @@ class QuizViewModel @Inject constructor(
     }
 
     fun resetUiState() {
-        _uiState.value = SimulacroUiState()
+        _uiState.value = QuizUiState()
     }
 
 }

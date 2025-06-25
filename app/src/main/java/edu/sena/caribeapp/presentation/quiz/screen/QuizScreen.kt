@@ -17,6 +17,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import edu.sena.caribeapp.presentation.clase.ClassViewModel
+import edu.sena.caribeapp.presentation.quiz.QuizViewModel
 import edu.sena.caribeapp.ui.theme.CaribeAppTheme
 
 import edu.sena.caribeapp.ui.theme.Primary
@@ -24,7 +28,11 @@ import edu.sena.caribeapp.ui.theme.PrimaryBackGround
 import edu.sena.caribeapp.ui.theme.Secondary
 
 @Composable
-fun QuizScreen(modifier: Modifier = Modifier) {
+fun QuizScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    viewModel: QuizViewModel = hiltViewModel()
+    ) {
     // Estado para la pregunta actual y la opción seleccionada
     var selectedOption by remember { mutableStateOf<String?>(null) }
     val currentQuestionText = "What is the capital of South Korea?"
@@ -84,10 +92,3 @@ fun QuizScreen(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewQuizScreen() {
-    CaribeAppTheme {
-        QuizScreen()
-    }
-}
