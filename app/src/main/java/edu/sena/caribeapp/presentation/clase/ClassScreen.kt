@@ -313,13 +313,13 @@ fun ClassSimulacroCard(simulacro: Simulacro, onClick: (Simulacro) -> Unit) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = simulacro.titulo,
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "${simulacro.preguntasRespondidas} de ${simulacro.totalPreguntas} Preguntas respondidas",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 15.sp),
                     color = Color.Gray
                 )
                 Spacer(modifier = Modifier.height(4.dp))
@@ -330,7 +330,7 @@ fun ClassSimulacroCard(simulacro: Simulacro, onClick: (Simulacro) -> Unit) {
                         "en progreso" -> "Disponible Hasta: ${simulacro.fechaFin?.substringBefore("T") ?: "--/--"}"
                         else -> ""
                     },
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
                     color = Color.Gray
                 )
             }
