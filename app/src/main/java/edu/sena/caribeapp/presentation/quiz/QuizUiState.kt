@@ -9,10 +9,13 @@ import edu.sena.caribeapp.presentation.home.SimulacroConClase
 
 data class QuizUiState(
     val isLoading: Boolean = false,
+    val erroMessage: String? = null,
+    val pregunta: Pregunta? = null,
     val estudiante: Estudiante? = null,
     val clasesICFES: List<ClaseICFES>? = emptyList(),
-    val listPreguntas: List<Pregunta>? = emptyList<Pregunta>(),
+    //val listPreguntas: List<String>? = emptyList(),
     val indexPreguntaActual: Int? = 0,
-    val cantidadPreguntas: Int?  = 0
-    
+    val cantidadPreguntas: Int?  = 0,
+    val primerLoading: Boolean = false
+
 )
