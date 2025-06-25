@@ -109,11 +109,21 @@ fun HomeScreen(
             uiState = uiState,
             onTabSelected = viewModel::onTabSelected,
             onSearchQueryChange = viewModel::onSearchQueryChange,
-            onClassClick = { clase -> // ¡Modificado!
+            onClassClick = { clase ->
                 uiState.estudiante?.let { navController.navigate(AppScreens.ClassScreen.createRoute(clase.id, estudianteId =it.id )) }
             },
             onForumClick = { foro -> /* TODO: Navegar a ForoDetailScreen */ },
-            onSimulacroClick = { simulacro -> /* TODO: Navegar a SimulacroDetailScreen */ }
+            onSimulacroClick = { simulacroConClase ->
+                uiState.estudiante?.let { estudiante ->
+                    navController.navigate(
+                        AppScreens.SimulacroScreen.createRoute(
+                            estudianteId = estudiante.id,
+                            claseId = simulacroConClase.claseId,
+                            simulacroId = simulacroConClase.simulacro.id
+                        )
+                    )
+                }
+            }
         )
     }
 }
@@ -129,7 +139,7 @@ fun HomeContent(
     onSearchQueryChange: (String) -> Unit,
     onClassClick: (ClaseICFES) -> Unit,
     onForumClick: (Foro) -> Unit,
-    onSimulacroClick: (Simulacro) -> Unit
+    onSimulacroClick: (SimulacroConClase) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -324,9 +334,9 @@ fun AdvanceSection(
     selectedTab: HomeTab,
     onTabSelected: (HomeTab) -> Unit,
     foros: List<Foro>,
-    simulacros: List<Simulacro>,
+    simulacros: List<SimulacroConClase>,
     onForumClick: (Foro) -> Unit,
-    onSimulacroClick: (Simulacro) -> Unit
+    onSimulacroClick: (SimulacroConClase) -> Unit
 ) {
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
@@ -364,8 +374,8 @@ fun AdvanceSection(
                 if (simulacros.isEmpty()) {
                     Text("No hay simulacros disponibles.", style = MaterialTheme.typography.bodyMedium)
                 } else {
-                    simulacros.forEach { simulacro ->
-                        SimulacroCard(simulacro = simulacro, onClick = onSimulacroClick)
+                    simulacros.forEach { simulacroConClase ->
+                        SimulacroCard(simulacroConClase = simulacroConClase, onClick = onSimulacroClick)
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
@@ -424,13 +434,13 @@ fun ForumCard(foro: Foro, onClick: (Foro) -> Unit) {
  * Composable para una tarjeta individual de Simulacro.
  */
 @Composable
-fun SimulacroCard(simulacro: Simulacro, onClick: (Simulacro) -> Unit) {
+fun SimulacroCard(simulacroConClase: SimulacroConClase, onClick: (SimulacroConClase) -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        onClick = { onClick(simulacro) }
+        onClick = { onClick(simulacroConClase) }
     ) {
         Column(
             modifier = Modifier
@@ -438,17 +448,17 @@ fun SimulacroCard(simulacro: Simulacro, onClick: (Simulacro) -> Unit) {
                 .padding(16.dp)
         ) {
             Text(
-                text = simulacro.titulo,
+                text = simulacroConClase.simulacro.titulo,
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 20.sp)
             )
             Text(
-                text = "Área: ${simulacro.area}",
+                text = "Área: ${simulacroConClase.simulacro.area}",
                 style = MaterialTheme.typography.bodyMedium,
             )
             Text(
-                text = "Estado: ${simulacro.estado.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}", // ¡Corregido!
+                text = "Estado: ${simulacroConClase.simulacro.estado.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}", // ¡Corregido!
                 style = MaterialTheme.typography.bodyMedium,
-                color = when (simulacro.estado) {
+                color = when (simulacroConClase.simulacro.estado) {
                     "completado" -> Color.Green
                     "pendiente" -> Color.Red
                     "en progreso" -> Color.Blue
@@ -457,7 +467,7 @@ fun SimulacroCard(simulacro: Simulacro, onClick: (Simulacro) -> Unit) {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Button(
-                onClick = { onClick(simulacro) },
+                onClick = { onClick(simulacroConClase) },
                 modifier = Modifier.align(Alignment.End),
                 colors = ButtonDefaults.buttonColors(containerColor = Secondary)
             ) {
@@ -500,7 +510,11 @@ fun HomeScreenPreview() {
                 estudiante = sampleEstudiante,
                 clasesICFES = sampleEstudiante.clasesICFES ?: emptyList(),
                 foros = sampleEstudiante.clasesICFES?.flatMap { it.foros } ?: emptyList(),
-                simulacros = sampleEstudiante.clasesICFES?.flatMap { it.simulacros } ?: emptyList(),
+                simulacros = sampleEstudiante.clasesICFES?.flatMap { clase ->
+                    clase.simulacros.map { simulacro ->
+                        SimulacroConClase(simulacro, clase.id)
+                    }
+                } ?: emptyList(),
                 searchQuery = "actividad"
             ),
             onTabSelected = {},
@@ -511,4 +525,3 @@ fun HomeScreenPreview() {
         )
     }
 }
-

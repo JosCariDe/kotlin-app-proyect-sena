@@ -16,7 +16,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
-import edu.sena.caribeapp.domain.estudiantes.model.Simulacro
 import edu.sena.caribeapp.presentation.auth.login.LoginScreen // ¡Nueva importación!
 import edu.sena.caribeapp.presentation.auth.register.RegisterScreen
 import edu.sena.caribeapp.presentation.clase.ClassScreen

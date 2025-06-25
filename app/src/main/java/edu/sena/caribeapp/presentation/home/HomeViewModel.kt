@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle // ¡Nueva importación!
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import edu.sena.caribeapp.domain.estudiantes.model.ClaseICFES
 import edu.sena.caribeapp.domain.estudiantes.model.Estudiante
 import edu.sena.caribeapp.domain.estudiantes.usecase.GetEstudianteByIdUseCase
 import edu.sena.caribeapp.util.Resource
@@ -53,7 +54,11 @@ class HomeViewModel @Inject constructor(
                             estudiante = estudiante,
                             clasesICFES = estudiante.clasesICFES ?: emptyList(),
                             foros = estudiante.clasesICFES?.flatMap { it.foros } ?: emptyList(),
-                            simulacros = estudiante.clasesICFES?.flatMap { it.simulacros } ?: emptyList(),
+                            simulacros = estudiante.clasesICFES?.flatMap { clase ->
+                                clase.simulacros.map { simulacro ->
+                                    SimulacroConClase(simulacro, clase.id)
+                                }
+                            } ?: emptyList(),
                             errorMessage = null
                         )
                         // Si el usuario añadió una acción de bienvenida personalizada, la invocamos aquí

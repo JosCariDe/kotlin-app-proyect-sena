@@ -35,6 +35,11 @@ class SimulacroViewModel @Inject constructor(
     private lateinit var objSimulacro : Simulacro
     // Funcion para cargar la clase en el uiStateClase
 
+    init {
+        // Cuando el ViewModel se crea, inicia la carga de datos usando el ID obtenido
+        loadSimulacroData()
+    }
+
     fun loadSimulacroData() {
         viewModelScope.launch {
 
@@ -52,6 +57,7 @@ class SimulacroViewModel @Inject constructor(
                                 isLoading = false,
                                 estudiante = estudiante,
                                 simulacro = targetSimulacro,
+                                numPreguntas = targetSimulacro.listaIdPreguntas.size,
                                 errorMessage = null
                             )
                         } else {
