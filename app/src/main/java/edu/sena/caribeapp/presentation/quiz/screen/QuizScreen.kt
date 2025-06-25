@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import edu.sena.caribeapp.presentation.clase.ClassViewModel
+import edu.sena.caribeapp.presentation.navigation.AppScreens
 import edu.sena.caribeapp.presentation.quiz.QuizViewModel
 import edu.sena.caribeapp.ui.theme.CaribeAppTheme
 
@@ -33,12 +36,14 @@ fun QuizScreen(
     navController: NavController,
     viewModel: QuizViewModel = hiltViewModel()
     ) {
-    // Estado para la pregunta actual y la opción seleccionada
+    val uiState by viewModel.uiState.collectAsState()
+
+    // Estado para la opción seleccionada
     var selectedOption by remember { mutableStateOf<String?>(null) }
-    val currentQuestionText = "What is the capital of South Korea?"
-    val options = listOf("Pyongyang", "Taegu", "Seoul", "Kitakyushu")
-    val currentQuestionNumber = 2
-    val totalQuestions = 10
+
+    val currentQuestion = uiState.pregunta
+    val currentQuestionNumber = uiState.indexPreguntaActual ?: 0
+    val totalQuestions = uiState.cantidadPreguntas ?: 0
 
     // Para simular la selección de una opción
     val onOptionSelected: (String) -> Unit = { option ->
@@ -57,7 +62,7 @@ fun QuizScreen(
         ) {
             QuizTopBar(
                 title = "Quiz Mode",
-                onBackClick = { /* TODO: Implement navigation back */ },
+                onBackClick = { navController.popBackStack() }, // Implementa la navegación de regreso
                 onMenuClick = { /* TODO: Implement menu action */ }
             )
             ProgressBarWithText(
@@ -66,29 +71,73 @@ fun QuizScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
             QuizCategoryCard(
-                category = "Geography",
+                category = currentQuestion?.area ?: "General", // Usa la categoría de la pregunta
                 questionNumbrer = currentQuestionNumber,
                 totalQuestions = totalQuestions
             )
             Spacer(modifier = Modifier.height(16.dp))
-            QuestionText(question = currentQuestionText)
+            QuestionText(question = currentQuestion?.enunciado ?: "Cargando pregunta...") // Usa el enunciado de la pregunta
             Spacer(modifier = Modifier.height(8.dp))
 
-            options.forEach { option ->
+            currentQuestion?.opciones?.forEach { option ->
                 OptionButton(
-                    text = option,
-                    isSelected = selectedOption == option,
-                    onClick = { onOptionSelected(option) }
+                    text = option.texto,
+                    isSelected = selectedOption == option.texto,
+                    onClick = { onOptionSelected(option.texto) }
                 )
             }
 
             Spacer(modifier = Modifier.weight(1f)) // Empuja los botones de navegación al final
 
             QuizNavigationButtons(
-                onPreviousClick = { /* TODO: Implement previous question logic */ },
-                onNextClick = { /* TODO: Implement next question logic */ }
+                onPreviousClick = {
+                    val currentQuestionIndex = uiState.indexPreguntaActual ?: 0
+                    val estudianteId = uiState.estudiante?.id.toString()
+                    val claseId = uiState.clase?.id
+                    val simulacroId = uiState.simulacro?.id
+                    val listaIdPreguntas = uiState.simulacro?.listaIdPreguntas ?: emptyList()
+
+                    if (currentQuestionIndex > 0) {
+                        val previousQuestionId = listaIdPreguntas[currentQuestionIndex - 1]
+                        navController.navigate(
+                            AppScreens.QuizScreen.createRoute(
+                                estudianteId = estudianteId,
+                                claseId = uiState.clase!!.id,
+                                simulacroId = uiState.simulacro!!.id,
+                                preguntaId = previousQuestionId,
+                                indexActual = (currentQuestionIndex - 1).toString(),
+                                cantidadPreguntas = listaIdPreguntas.size.toString()
+                            )
+                        )
+                    } else {
+                        // Opcional: Mostrar un Toast o deshabilitar el botón
+                    }
+                },
+                onNextClick = {
+                    val currentQuestionIndex = uiState.indexPreguntaActual ?: 0
+                    val totalQuestions = uiState.cantidadPreguntas ?: 0
+                    val estudianteId = uiState.estudiante?.id.toString()
+                    val claseId = uiState.clase?.id.toString()
+                    val simulacroId = uiState.simulacro?.id.toString()
+                    val listaIdPreguntas = uiState.simulacro?.listaIdPreguntas ?: emptyList()
+
+                    if (currentQuestionIndex < totalQuestions - 1) {
+                        val nextQuestionId = listaIdPreguntas[currentQuestionIndex + 1]
+                        navController.navigate(
+                            AppScreens.QuizScreen.createRoute(
+                                estudianteId = estudianteId,
+                                claseId = claseId,
+                                simulacroId = simulacroId,
+                                preguntaId = nextQuestionId,
+                                indexActual = (currentQuestionIndex + 1).toString(),
+                                cantidadPreguntas = listaIdPreguntas.size.toString()
+                            )
+                        )
+                    } else {
+                        // Opcional: Mostrar un Toast o navegar a una pantalla de resultados
+                    }
+                }
             )
         }
     }
 }
-

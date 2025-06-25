@@ -47,8 +47,9 @@ class SimulacroViewModel @Inject constructor(
                 is Resource.Success -> {
                     val estudiante = result.data
                     if (estudiante != null) {
-                        val targetSimulacro = estudiante.clasesICFES
+                        val targetClase = estudiante.clasesICFES
                             ?.find { it.id == claseId }
+                        val targetSimulacro = targetClase
                             ?.simulacros
                             ?.find { it.id == idSimulacro }
 
@@ -56,6 +57,7 @@ class SimulacroViewModel @Inject constructor(
                             _uiState.value = _uiState.value.copy(
                                 isLoading = false,
                                 estudiante = estudiante,
+                                clase = targetClase,
                                 simulacro = targetSimulacro,
                                 numPreguntas = targetSimulacro.listaIdPreguntas.size,
                                 errorMessage = null

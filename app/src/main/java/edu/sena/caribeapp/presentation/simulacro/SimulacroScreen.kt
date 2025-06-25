@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import edu.sena.caribeapp.domain.estudiantes.model.Simulacro
 import edu.sena.caribeapp.presentation.component.utils.MainButton
 import edu.sena.caribeapp.presentation.component.utils.SpaceH
+import edu.sena.caribeapp.presentation.navigation.AppScreens
 import edu.sena.caribeapp.ui.theme.Primary
 import edu.sena.caribeapp.ui.theme.PrimaryBackGround
 import edu.sena.caribeapp.ui.theme.Secondary
@@ -99,7 +100,8 @@ fun SimulacroScreen(
                 } else if (uiState.simulacro != null) {
                     SimulacroContent(
                         uiState = uiState,
-                        onStartSimulacroTouch = { /* TODO: Implementar navegación a QuizScreen */ }
+                        onStartSimulacroTouch = { /* TODO: Implementar navegación a QuizScreen */ },
+                        navController = navController
                     )
                 } else {
                     Text("No se pudo cargar el simulacro.", color = MaterialTheme.colorScheme.error)
@@ -112,7 +114,8 @@ fun SimulacroScreen(
 @Composable
 fun SimulacroContent(
     uiState: SimulacroUiState,
-    onStartSimulacroTouch: (List<Simulacro>) -> Unit
+    onStartSimulacroTouch: (List<Simulacro>) -> Unit,
+    navController: NavController
 ) {
     Column(
         modifier = Modifier
@@ -166,11 +169,28 @@ fun SimulacroContent(
                 SpaceH(32.dp)
                 MainButton(
                     text = "Empezar Simulacro",
-                    onClick = { uiState.simulacro?.listaIdPreguntas?.let {} }
+                    onClick = {
+                        uiState.simulacro?.listaIdPreguntas?.let { listaIdPreguntas ->
+                            if (listaIdPreguntas.isNotEmpty()) {
+                                val firstQuestionId = listaIdPreguntas.first()
+                                val totalQuestions = listaIdPreguntas.size
+                                navController.navigate(
+                                    AppScreens.QuizScreen.createRoute(
+                                        estudianteId = uiState.estudiante!!.id,
+                                        claseId = uiState.clase!!.id,
+                                        simulacroId = uiState.simulacro.id,
+                                        preguntaId = firstQuestionId,
+                                        indexActual = "0", // La primera pregunta es el índice 0
+                                        cantidadPreguntas = totalQuestions.toString()
+                                    )
+                                )
+
+
+                            }
+                        }
+                    }
                 )
             }
         }
     }
 }
-
-

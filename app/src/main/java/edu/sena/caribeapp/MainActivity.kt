@@ -107,12 +107,23 @@ class MainActivity : ComponentActivity() {
 
                         composable (
                             route = AppScreens.QuizScreen.route,
-                            arguments = listOf(navArgument("preguntaId") {type = NavType.StringType}, navArgument("indexActual") {type = NavType.IntType}, navArgument("cantidadPreguntas") {type = NavType.IntType} )
+                            arguments = listOf(
+                                navArgument("estudianteId") {type = NavType.StringType},
+                                navArgument("claseId") {type = NavType.StringType},
+                                navArgument("simulacroId") {type = NavType.StringType},
+                                navArgument("preguntaId") {type = NavType.StringType},
+                                navArgument("indexActual") {type = NavType.IntType},
+                                navArgument("cantidadPreguntas") {type = NavType.IntType}
+                            )
                         ) { backStackEntry ->
+                            val estudianteId = backStackEntry.arguments?.getString("estudianteId")
+                            val claseId = backStackEntry.arguments?.getString("claseId")
+                            val simulacroId = backStackEntry.arguments?.getString("simulacroId")
                             val preguntaId = backStackEntry.arguments?.getString("preguntaId")
                             val indexActual = backStackEntry.arguments?.getInt("indexActual")
-                            val cantidadPreguntas = backStackEntry.arguments?.getString("cantidadPreguntas")
-                            if (preguntaId != null && indexActual != null  && cantidadPreguntas != null ) {
+                            val cantidadPreguntas = backStackEntry.arguments?.getInt("cantidadPreguntas")
+
+                            if (estudianteId != null && claseId != null && simulacroId != null && preguntaId != null && indexActual != null  && cantidadPreguntas != null ) {
                                 QuizScreen(navController = navController)
                             } else {
                                 // Manejar el caso de ID nulo, quizás navegar de vuelta a HomeScreen

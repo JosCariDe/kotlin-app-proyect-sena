@@ -23,9 +23,9 @@ sealed class AppScreens(val route: String) {
         fun createRoute(estudianteId: String, claseId: String, simulacroId: String) = "simulacro_screen/$estudianteId/$claseId/$simulacroId"
     }
     // La conversion de String a Int
-    object QuizScreen: AppScreens("quiz_screen/{preguntaId}/{indexActual}/{cantidadPreguntas}") {
-        fun createRoute(preguntaId: String, indexActual: String, cantidadPreguntas: String): String {
-            return "quiz_screen/$preguntaId/$indexActual/$cantidadPreguntas"
+    object QuizScreen: AppScreens("quiz_screen/{estudianteId}/{claseId}/{simulacroId}/{preguntaId}/{indexActual}/{cantidadPreguntas}") {
+        fun createRoute(estudianteId: String, claseId: String, simulacroId: String, preguntaId: String, indexActual: String, cantidadPreguntas: String): String {
+            return "quiz_screen/$estudianteId/$claseId/$simulacroId/$preguntaId/$indexActual/$cantidadPreguntas"
         }
     }
     // Añadir más pantallas aquí a medida que se creen
