@@ -6,4 +6,5 @@ data class ClaseICFES(
     val profesor: String,
     val foros: List<Foro>,
     val simulacros: List<Simulacro>,
+    val participantes: List<Estudiante> = emptyList() // Añadido para la lista de miembros
 )
