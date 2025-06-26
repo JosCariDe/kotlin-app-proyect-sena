@@ -71,7 +71,6 @@ fun QuizScreen(
         val currentQuestionNumber = uiState.indexPreguntaActual ?: 0
         val totalQuestions = uiState.cantidadPreguntas ?: 0
 
-        // Para simular la selección de una opción
         val onOptionSelected: (String) -> Unit = { option ->
             selectedOption = option
         }
@@ -87,7 +86,7 @@ fun QuizScreen(
                 modifier = Modifier.fillMaxSize()
             ) {
                 QuizTopBar(
-                    title = "Quiz Mode",
+                    title = uiState.simulacro!!.titulo,
                     onBackClick = {
                         navController.navigate(
                             AppScreens.SimulacroScreen.createRoute(
@@ -176,7 +175,13 @@ fun QuizScreen(
                                 )
                             )
                         } else {
-                            Toast.makeText(context, "No se puede ir a la siguiente pregunta. Datos incompletos o fin del simulacro.", Toast.LENGTH_SHORT).show()
+                            navController.navigate(
+                                AppScreens.ClassScreen.createRoute(
+                                    estudianteId = estudianteId,
+                                    claseId = claseId
+                                )
+                            )
+                            Toast.makeText(context, "SIMULACRO TERMINADO CON EXITO.", Toast.LENGTH_SHORT).show()
                             Log.e("QuizScreen", "Datos incompletos para navegación siguiente: estudianteId=$estudianteId, claseId=$claseId, simulacroId=$simulacroId")
                         }
                     }
