@@ -88,7 +88,15 @@ fun QuizScreen(
             ) {
                 QuizTopBar(
                     title = "Quiz Mode",
-                    onBackClick = { navController.popBackStack() }, // Implementa la navegación de regreso
+                    onBackClick = {
+                        navController.navigate(
+                            AppScreens.SimulacroScreen.createRoute(
+                                estudianteId = uiState.estudiante!!.id,
+                                claseId = uiState.clase!!.id,
+                                simulacroId = uiState.simulacro!!.id
+                            )
+                        )
+                                  },
                     onMenuClick = { /* TODO: Implement menu action */ }
                 )
                 ProgressBarWithText(

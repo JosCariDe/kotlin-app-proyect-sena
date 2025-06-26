@@ -1,5 +1,6 @@
 package edu.sena.caribeapp.presentation.simulacro
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -112,6 +113,7 @@ fun SimulacroScreen(
     )
 }
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun SimulacroContent(
     uiState: SimulacroUiState,
