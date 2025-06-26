@@ -176,9 +176,10 @@ fun QuizScreen(
                             )
                         } else {
                             navController.navigate(
-                                AppScreens.ClassScreen.createRoute(
+                                AppScreens.SimulacroScreen.createRoute(
                                     estudianteId = estudianteId,
-                                    claseId = claseId
+                                    claseId = uiState.clase!!.id,
+                                    simulacroId = uiState.simulacro!!.id
                                 )
                             )
                             Toast.makeText(context, "SIMULACRO TERMINADO CON EXITO.", Toast.LENGTH_SHORT).show()

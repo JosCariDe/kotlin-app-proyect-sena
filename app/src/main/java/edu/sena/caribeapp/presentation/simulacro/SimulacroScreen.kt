@@ -74,7 +74,11 @@ fun SimulacroScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.navigate(
+                        AppScreens.HomeScreen.createRoute(
+                            estudianteId = uiState.estudiante!!.id
+                        )
+                    ) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Volver",
