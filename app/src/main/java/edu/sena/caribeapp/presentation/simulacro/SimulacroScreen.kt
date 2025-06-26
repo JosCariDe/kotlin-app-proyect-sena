@@ -1,5 +1,6 @@
 package edu.sena.caribeapp.presentation.simulacro
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -170,22 +171,27 @@ fun SimulacroContent(
                 MainButton(
                     text = "Empezar Simulacro",
                     onClick = {
-                        uiState.simulacro?.listaIdPreguntas?.let { listaIdPreguntas ->
-                            if (listaIdPreguntas.isNotEmpty()) {
+                        uiState.simulacro?.let { simulacro ->
+                            uiState.estudiante?.let { estudiante ->
+                                uiState.clase?.let { clase ->
+                                    simulacro.listaIdPreguntas?.let { listaIdPreguntas ->
+                                        if (listaIdPreguntas.isNotEmpty()) {
                                 val firstQuestionId = listaIdPreguntas.first()
                                 val totalQuestions = listaIdPreguntas.size
+                                            Log.d("SimulacroScreen", "Navegando a QuizScreen con: estudianteId=${estudiante.id}, claseId=${clase.id}, simulacroId=${simulacro.id}, preguntaId=$firstQuestionId, indexActual=0, cantidadPreguntas=$totalQuestions")
                                 navController.navigate(
                                     AppScreens.QuizScreen.createRoute(
-                                        estudianteId = uiState.estudiante!!.id,
-                                        claseId = uiState.clase!!.id,
-                                        simulacroId = uiState.simulacro.id,
+                                        estudianteId = estudiante.id,
+                                        claseId = clase.id,
+                                        simulacroId = simulacro.id,
                                         preguntaId = firstQuestionId,
-                                        indexActual = "0", // La primera pregunta es el índice 0
+                                        indexActual = "0",
                                         cantidadPreguntas = totalQuestions.toString()
                                     )
                                 )
-
-
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

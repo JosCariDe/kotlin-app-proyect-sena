@@ -2,14 +2,25 @@
 package edu.sena.caribeapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -112,22 +123,58 @@ class MainActivity : ComponentActivity() {
                                 navArgument("claseId") {type = NavType.StringType},
                                 navArgument("simulacroId") {type = NavType.StringType},
                                 navArgument("preguntaId") {type = NavType.StringType},
-                                navArgument("indexActual") {type = NavType.IntType},
-                                navArgument("cantidadPreguntas") {type = NavType.IntType}
+                                navArgument("indexActual") {type = NavType.StringType}, // Cambiado a StringType
+                                navArgument("cantidadPreguntas") {type = NavType.StringType} // Cambiado a StringType
                             )
                         ) { backStackEntry ->
                             val estudianteId = backStackEntry.arguments?.getString("estudianteId")
                             val claseId = backStackEntry.arguments?.getString("claseId")
                             val simulacroId = backStackEntry.arguments?.getString("simulacroId")
                             val preguntaId = backStackEntry.arguments?.getString("preguntaId")
-                            val indexActual = backStackEntry.arguments?.getInt("indexActual")
-                            val cantidadPreguntas = backStackEntry.arguments?.getInt("cantidadPreguntas")
+                            val indexActual = backStackEntry.arguments?.getString("indexActual") // Obtener como String
+                            val cantidadPreguntas = backStackEntry.arguments?.getString("cantidadPreguntas") // Obtener como String
 
                             if (estudianteId != null && claseId != null && simulacroId != null && preguntaId != null && indexActual != null  && cantidadPreguntas != null ) {
                                 QuizScreen(navController = navController)
                             } else {
-                                // Manejar el caso de ID nulo, quizás navegar de vuelta a HomeScreen
-                                // o mostrar un error
+                                val missingArgs = mutableListOf<String>()
+                                if (estudianteId == null) missingArgs.add("ID de Estudiante")
+                                if (claseId == null) missingArgs.add("ID de Clase")
+                                if (simulacroId == null) missingArgs.add("ID de Simulacro")
+                                if (preguntaId == null) missingArgs.add("ID de Pregunta")
+                                if (indexActual == null) missingArgs.add("Índice Actual")
+                                if (cantidadPreguntas == null) missingArgs.add("Cantidad de Preguntas")
+
+                                val errorMessage = "Error: Faltan los siguientes argumentos para iniciar el quiz: ${missingArgs.joinToString(", ")}."
+                                Log.e("NavGraph_QuizScreen", errorMessage) // Log para el desarrollador
+
+                                // Puedes mostrar este mensaje en un Composable de error
+                                // o usarlo para un Toast/Snackbar si navegas de vuelta.
+
+                                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                        Text(errorMessage, color = Color.Red, textAlign = TextAlign.Center)
+                                        Spacer(modifier = Modifier.height(16.dp))
+                                        Button(onClick = {
+                                            // Decide a dónde navegar. Quizás a la pantalla anterior o a Home.
+                                            // Ejemplo: Volver a la pantalla anterior
+                                            navController.popBackStack()
+
+                                            // Ejemplo: Ir a HomeScreen (asegúrate de que HomeScreen pueda manejar esto
+                                            // o de que no necesite argumentos que también podrían faltar)
+                                            /*
+                                            navController.navigate(AppScreens.HomeScreen.route) { // Asumiendo que HomeScreen no necesita el ID aquí, o tienes un fallback
+                                                popUpTo(navController.graph.findStartDestination().id) {
+                                                    inclusive = true
+                                                }
+                                                launchSingleTop = true
+                                            }
+                                            */
+                                        }) {
+                                            Text("Volver")
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
